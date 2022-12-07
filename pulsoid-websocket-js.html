@@ -1,0 +1,63 @@
+//Pulsoid to JS Websocket by SERIAL CO_ @serialco 's Jake Tan @jxke
+//Special thanks to Ann from Pulsoid, Syahrul Anuar @syahshiimi and bmknight on JSFiddle
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pulsoid Websocket in JS Integration</h1>
+    <div id="info">
+        <p>
+            <strong>Status: </strong><span id="connectionstatus">Disconnected</span>
+        </p>
+    </div>
+    <script>
+        //First test for the browsers support for WebSockets
+        if (!window.WebSocket) {
+            //If the user's browser does not support WebSockets, give an alert message
+            alert("Your browser does not support the WebSocket API!");
+        } else {
+            //Set the websocket server URL
+            var websocketurl = "wss://dev.pulsoid.net/api/v1/data/real_time?access_token=8c4da3ce-7ed7-4a19-a1f1-058498661e45&response_mode=text_plain_only_heart_rate"; //Replace and add your Access Token here
+
+            //get status element
+            var connstatus = document.getElementById("connectionstatus");
+
+            //get info div element
+            var infodiv = document.getElementById("info");
+
+            //Create the WebSocket object (web socket echo test service provided by websocket.org)
+            socket = new WebSocket(websocketurl);
+
+            //This function is called when the websocket connection is opened
+            socket.onopen = function () {
+                connstatus.innerHTML = "Connected!";
+                infodiv.innerHTML += "<p>Connected to websocket server at: " + websocketurl + "</p>";
+            };
+
+            //This function is called when the websocket connection is closed
+            socket.onclose = function () {
+                connstatus.innerHTML = "Disconnected";
+                infodiv.innerHTML += "<p>Disconnected from the websocket server at: " + websocketurl + "</p>";
+            };
+
+            //This function is called when the websocket receives a message. It is passed the message object as its only parameter
+            socket.onmessage = function (message) {
+                infodiv.innerHTML += "<p>Message received from server: '" + message.data + "'</p>";
+            };
+        }
+    </script>
+</body>
+
+</html>
